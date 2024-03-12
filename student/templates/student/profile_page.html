@@ -1,26 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
-        <!-- Section-->
-        <section class="py-5">
-            <div class="container px-4 px-lg-5 mt-5">
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        {% for field in form %}
-                            {{field.label_tag}}
-                            <p> {{field}}</p>
-                            {% for error in field.errors %}
-                                <p class="text-danger">{{error}}</p>
-                            {% endfor %}
-                        {% endfor %}
-                        <button type="submit" class="btn-outline-primary w-100 "> Update </button>
-                    </form>
-                       
-                            <!-- Product actions-->
-                          
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Footer-->
-   {% endblock%}    
+{% load static %}
+<div  style="text-align: center; margin-top: 30px; margin-bottom: 30px; width: 500px; margin-right: 400px; margin-left: 400px;
+  border-radius: 30px ; background-color: rgb(230, 189, 93);">
+    {% csrf_token %}
+    
+    <img  style="border-radius: 100px; height: 200px; width: 200px;" src="{{user.photo.url}}" alt="user" />
+    <br>
+    <span >{{user.username}}</span>
+    <form style="margin-top: 50px; text-align: center; font-size: 15px; font-family: 'Times New Roman', Times, serif;" action="" method="post">
+        {% csrf_token %}
+        {{form.as_p }}
+        <button style="border-radius: 50px; margin-bottom: 10px;" type="submit" class="btn-outline-primary w-100 " href=""> Update </button>
+    </form>
+   
+</div>   
+{% endblock%}    

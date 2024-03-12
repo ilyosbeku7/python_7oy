@@ -21,7 +21,7 @@ def login_page(request):
 
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect(reverse('index'))
+                return HttpResponseRedirect(reverse('mahsulot:index'))
 
     form=LoginForm()
     data={
@@ -48,7 +48,7 @@ def register_page(request):
                user.save()
                return   HttpResponseRedirect(reverse('login_page'))
            except:
-                return   HttpResponseRedirect(reverse('index'))
+                return   HttpResponseRedirect(reverse('mahsulot:index'))
     
 
     form=RegisterForm()
@@ -62,9 +62,12 @@ class Profile_view(UpdateView):
         form_class=ProfileForm
         model=User
         template_name='student/profile_page.html'
+        extra_content={
+            'user':User.objects.all()
+        }
         
         def get_object(self, queryset=None):
             return self.request.user
         
         def get_success_url(self):
-            return reverse_lazy('index')
+            return reverse_lazy('mahsulot:index')

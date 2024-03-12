@@ -41,8 +41,8 @@ class ProfileForm(forms.ModelForm):
     username=forms.CharField( widget=forms.TextInput(attrs={"class":"form-control"}))
     phone_number=forms.CharField( widget=forms.TextInput(attrs={"class":"form-control"}))
     photo=forms.ImageField( widget=forms.FileInput(attrs={"class":"form-control"}))
-    bio=forms.CharField( widget=forms.TextInput(attrs={"class":"text-area"}))
-    email=forms.EmailField( widget=forms.EmailInput(attrs={"class":"text-area"}))
+    bio=forms.CharField( widget=forms.TextInput(attrs={"class":"form-control"}))
+    email=forms.EmailField( widget=forms.EmailInput(attrs={"class":"form-control"}))
      
     class Meta:
         model=User
