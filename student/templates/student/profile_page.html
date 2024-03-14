@@ -8,9 +8,15 @@
     <img  style="border-radius: 100px; height: 200px; width: 200px;" src="{{user.photo.url}}" alt="user" />
     <br>
     <span >{{user.username}}</span>
-    <form style="margin-top: 50px; text-align: center; font-size: 15px; font-family: 'Times New Roman', Times, serif;" action="" method="post">
+    <form  style="margin-top: 50px; text-align: center; font-size: 15px; font-family: 'Times New Roman', Times, serif;" action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{form.as_p }}
+        {% for field in form %}
+          {{field.label_tag}}
+          <p>{{field}}</p>
+          {% for error in field.errors %}
+              <p class="text-danger"> {{error}}</p>
+          {% endfor %}
+        {% endfor %}
         <button style="border-radius: 50px; margin-bottom: 10px;" type="submit" class="btn-outline-primary w-100 " href=""> Update </button>
     </form>
    

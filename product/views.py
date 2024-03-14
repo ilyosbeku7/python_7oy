@@ -8,24 +8,62 @@ from .cart import Cart
 # def index(request):
 #     return render( request, 'product/index.html')
 
+def product_price(request, id):
+    product = get_object_or_404(Product, pk=id)
+    total_price = product.price  # Assuming 'price' is a field in your Product model
+    return JsonResponse({'product_id': id, 'total_price': total_price})
+
+
 def cart_summary(request):
-    return HttpResponse('Hello world')
+    cart=Cart(request)
+    products=cart.get_products()
+    quantity=cart.get_quantity()
+    
+    total=cart.get_total_price()
+    summa=0
+    for product in products:
+        summa += cart.get_total_price_for_product(product)
+    data={
+         'products':products,
+         'quantites':quantity,
+         'total':total,
+         'summa':summa
+    }
+         
+    return render(request, 'product/cart_summary.html', context=data)
  
 def cart_add(request):
         cart=Cart(request)
-        product_id=int(request.POST.get('product_id'))
-        product=get_object_or_404(Product, id=product_id)
-        cart.add(product=product)
+        
+        if request.POST.get('action') == 'post':
+            product_id=int(request.POST.get('product_id'))
+            quantity=request.POST.get('product_quantity')
+            product=get_object_or_404(Product, id=product_id)
+            cart.add(product=product, quantity=quantity)
 
         return JsonResponse({'product_id':product_id})
 
    
 
 def cart_update(request):
-    return HttpResponse('Hello world')
+    cart = Cart(request)
+
+    if request.POST.get('action') == 'post':
+        product_id=int(request.POST.get('product_id'))
+        quantity=request.POST.get('product_quantity')
+        product=get_object_or_404(Product, id=product_id)
+        cart.product_update(product,quantity)
+    return JsonResponse({'status':'Hello world'})
 
 def cart_delete(request):
-    return HttpResponse('Hello world')
+    cart = Cart(request)
+
+    if request.POST.get('action') == 'post':
+        print(request.POST)
+        product_id = request.POST.get('product_id')
+        cart.delete_product(product_id)
+        return JsonResponse({'status': 'salom'})
+
 
 class ProductListView(ListView):
     model=Product

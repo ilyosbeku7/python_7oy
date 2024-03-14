@@ -13,7 +13,8 @@
                 </div>
                 <p class="lead">{{product.about}}</p>
                 <div class="d-flex">
-                    <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
+                    <input  id="inputQuantity" ui-input type="number" min="1" minlength="1" data-test-id="input__quantity" class max="15">
+                    
                     <button class="btn btn-outline-dark flex-shrink-0" id="add-cart" value="{{product.id}}" type="button">
                         <i class="bi-cart-fill me-1" ></i>
                         Add to cart
@@ -32,6 +33,7 @@
             url:  "{% url 'mahsulot:cart_add'%}",
             data:{
                 product_id: $('#add-cart').val(),
+                product_quantity: $('#inputQuantity').val(),
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                 action: 'post'
             }, 
@@ -45,4 +47,16 @@
         })
     })
 </script>
+<script>
+    document.getElementById('inputQuantity').addEventListener('input', function() {
+        const quantity = parseInt(this.value);
+        const addButton = document.getElementById('add-cart');
+        
+        if (quantity < 1) {
+            addButton.style.display = 'none';
+        } else {
+            addButton.style.display = 'inline-block';
+        }
+    });
+    </script>
    {% endblock%}    

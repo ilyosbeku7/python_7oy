@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            {% for product in products %}
+            {% for key, value in quantites.items %}
+
+            {% if key == product.id|slugify %}
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                  <div class="col-md-4">
+                    <img src="{{product.image.url}}" class="img-fluid rounded-start" alt="...">
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body">
+                      <h5 class="card-title">{{product.name}}</h5>
+                      <div class="d-flex align-items-center mt-3">
+                        
+                        <label for="inputQuantity">Quantity</label>
+                        <input class="form-control text-center me-3 " id="inputQuantity" type="num" value="{{value}}" style="max-width: 3rem" />
+                        <button  class="btn btn-outline-primary " id="update_product" data-index="{{product.id}}" >Update</button>
+                        <h5 class="text-center"> Total: {{summa}}</h5>
+                       </div>
+                      
+                      <button  type="button" class="btn btn-outline-danger mt-3" id="delete_product" data-index="{{product.id}}">Delete</button> 
+                      
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+
+            <h3 class="text-center"> Total: {{total}}</h3>
+        </div>
+    </div>
+</section>
+
+<script>
+
+
+
+    $(document).on('click', '#delete_product',  function(e){
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url:  "{% url 'mahsulot:cart_delete'%}",
+            data:{
+                
+                product_id: $(this).data('index'),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            }, 
+            success: function(json){
+                console.log(json)
+                location.reload()
+  
+            }
+        })
+    })
+
+
+    // #update uchun
+
+    $(document).on('click', '#update_product',  function(e){
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url:  "{% url 'mahsulot:cart_update'%}",
+            data:{
+                
+                product_id: $(this).data('index'),
+                product_quantity: $('#inputQuantity').val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            }, 
+            success: function(json){
+                console.log(json)
+                location.reload()
+  
+            }
+        })
+    })
+</script>
+   {% endblock%}    

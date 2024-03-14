@@ -6,7 +6,8 @@ from django.views.generic import UpdateView
 from django.contrib.auth import authenticate, login, logout
 from .forms import LoginForm, RegisterForm, ProfileForm
 from .models import  User
-from django.urls import  reverse_lazy, reverse
+from django.urls import  reverse_lazy
+from django.shortcuts import render, HttpResponseRedirect, reverse
 
 # Create your views here.
 
@@ -37,26 +38,22 @@ def logout_page(request):
 
 def register_page(request):
     if request.method == 'POST':
-        form=RegisterForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
-           try:
-               user=User()
-               user.username=form.cleaned_data['username']  
-               user.frist_name=form.cleaned_data['frist_name']  
-               user.last_name=form.cleaned_data['last_name']  
-               user.set_password(form.cleaned_data['password'])
-               user.save()
-               return   HttpResponseRedirect(reverse('login_page'))
-           except:
-                return   HttpResponseRedirect(reverse('mahsulot:index'))
-    
-
-    form=RegisterForm()
-    data={
-        'form':form
-    }
-
-    return render(request, 'student/register_page.html' ,context=data)
+            try:
+                user = User()
+                user.username = form.cleaned_data['username']
+                user.first_name = form.cleaned_data['first_name']
+                user.last_name = form.cleaned_data['last_name']
+                user.set_password(form.cleaned_data['password'])
+                user.save()
+                return HttpResponseRedirect(reverse('login_page'))
+            except :
+                  # or log the error for debugging
+                return HttpResponseRedirect(reverse('register_page'))
+    else:
+        form = RegisterForm()
+    return render(request, 'student/register_page.html', {'form': form})
 
 class Profile_view(UpdateView):     
         form_class=ProfileForm
