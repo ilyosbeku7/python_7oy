@@ -30,7 +30,7 @@
         e.preventDefault();
         $.ajax({
             type: 'POST',
-            url:  "{% url 'mahsulot:cart_add'%}",
+            url:  "{% url 'product:cart_add'%}",
             data:{
                 product_id: $('#add-cart').val(),
                 product_quantity: $('#inputQuantity').val(),

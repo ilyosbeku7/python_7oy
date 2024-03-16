@@ -1,6 +1,8 @@
 from django import forms
 from .models import User
 import re
+from django.core.validators import FileExtensionValidator
+
 
 class LoginForm(forms.Form):
     username=forms.CharField(required=True, widget=forms.TextInput(attrs={"class":"form-control"}))
@@ -13,7 +15,7 @@ class  RegisterForm(forms.Form):
     username=forms.CharField(required=True, widget=forms.TextInput(attrs={"class":"form-control"}))
     password=forms.CharField(required=True, widget=forms.PasswordInput(attrs={"class":"form-control"}))
     confirm_password=forms.CharField(required=True, widget=forms.PasswordInput(attrs={"class":"form-control"}))
-
+    photo=forms.ImageField(required=True, widget=forms.FileInput(attrs={"class":"form-control"}))
     def clean(self):
        password=self.cleaned_data.get('password')
        confirm_password=self.cleaned_data.get('confirm_password')
@@ -34,6 +36,7 @@ class  RegisterForm(forms.Form):
         if not (last_name.isalpha() and last_name[0].isupper()):
              raise forms.ValidationError('Familiya faqat harflardan va birinchi harfi katta yozilishi kerak')
         return last_name
+    
 class ProfileForm(forms.ModelForm):
    
     first_name=forms.CharField( widget=forms.TextInput(attrs={"class":"form-control"}))

@@ -2,6 +2,30 @@ from .models import Product
 from django.core.exceptions import ValidationError
 
 class Cart :   
+
+    def get_all_info(self):
+        products=self.get_products()
+        
+        
+        result=[]
+
+        for product in products:
+            if str(product.id) in self.cart:
+                data={
+                    'id':str(product.id),
+                    'name':str(product.name),
+                    'price':str(product.price),
+                    'quantity': str(self.cart[str(product.id)])
+                }
+                result.append(data)
+        return  result
+    def clear_cart(self):
+        self.cart.clear()
+
+        self.session.modified=True
+        return True
+     
+
     def __init__(self, request):
         self.session = request.session
         cart = self.session.get('session_key')
@@ -9,15 +33,8 @@ class Cart :
             cart=self.session['session_key']={}
         self.cart = cart
 
-    def get_total_price_for_product(self, product):
-        product_id = str(product.id)
-        if product_id in self.cart:
-            product = Product.objects.get(id=product_id)
-            quantity = int(self.cart[product_id])
-            total_price = product.price * quantity
-            return total_price
-        else:
-            return 0
+   
+        
     def add(self, product, quantity):
         product_id = str(product.id)  # Assuming the product has an 'id' attribute
         quantity=int(quantity)

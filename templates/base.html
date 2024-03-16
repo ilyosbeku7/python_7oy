@@ -25,24 +25,27 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'product:index' %}">Home</a></li>
+                        
                     
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Kategoriyalar</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                {% for category in categories %}
-                                <li><a class="dropdown-item" href="{% url 'mahsulot:category' category.id %}">{{category.name}}</a></li>
+                                <li><a class="dropdown-item" href="{% url 'product:category' category.id %}">{{category.name}}</a></li>
                                {% endfor %}
                             </ul>
                         </li>
                         
                         {% if user.is_authenticated %}
-
+                            <li class="nav-item"><a class="nav-link active" aria-current="page" href="{% url 'product:order_detail' user.id %}">My_orders</a></li>    
                             <li class="nav-item"><a class="nav-link" href="{% url 'profile_page' user.id %}">{{user.username}}</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'logout_page'%}">Log Out</a></li>
                         {% else %}
                             <li class="nav-item"><a class="nav-link" href="{% url 'register_page'%}">Register</a></li>
                             <li class="nav-item"><a class="nav-link" href="{% url 'login_page'%}">Login</a></li>
                         {% endif %}
+                       
+                       
                     </ul>
                     <form class="d-flex">
                         <a href="{% url 'product:cart_summary' %}"  class="btn btn-outline-dark" type="submit" >

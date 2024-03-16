@@ -7,7 +7,8 @@
                     <form action="" method="post">
                         {% csrf_token %}
                         {{form.as_p}}
-                        <button type="submit" class="btn-outline-primary w-100 "> LOG IN</button>
+                        <button type="submit" class="btn btn-outline-primary w-100 mb-2 "> LOG IN</button> <br>
+                        <a href="{% url 'register_page'%}" type="submit" class="btn btn-outline-primary w-100 mb-2 "> Register </a>
                     </form>
                        
                             <!-- Product actions-->
@@ -16,5 +17,7 @@
                 </div>
             </div>
         </section>
+        <br>
+        <br> 
         <!-- Footer-->
    {% endblock%}    

@@ -22,7 +22,7 @@ def login_page(request):
 
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect(reverse('mahsulot:index'))
+                return HttpResponseRedirect(reverse('product:index'))
 
     form=LoginForm()
     data={
@@ -60,11 +60,11 @@ class Profile_view(UpdateView):
         model=User
         template_name='student/profile_page.html'
         extra_content={
-            'user':User.objects.all()
+            'users':User.objects.all()
         }
         
         def get_object(self, queryset=None):
             return self.request.user
         
         def get_success_url(self):
-            return reverse_lazy('mahsulot:index')
+            return reverse_lazy('product:index')

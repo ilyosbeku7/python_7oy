@@ -20,7 +20,7 @@
                         <label for="inputQuantity">Quantity</label>
                         <input class="form-control text-center me-3 " id="inputQuantity" type="num" value="{{value}}" style="max-width: 3rem" />
                         <button  class="btn btn-outline-primary " id="update_product" data-index="{{product.id}}" >Update</button>
-                        <h5 class="text-center"> Total: {{summa}}</h5>
+                        <h5 class="text-center"> Total: {{total}}</h5>
                        </div>
                       
                       <button  type="button" class="btn btn-outline-danger mt-3" id="delete_product" data-index="{{product.id}}">Delete</button> 
@@ -33,20 +33,70 @@
             {% endfor %}
             {% endfor %}
 
-            <h3 class="text-center"> Total: {{total}}</h3>
+            <h3 class="text-center"> Total: {{total}} <a href=""  data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="exampleModelLabel" class="btn btn-outline-success fs-5 p-2">Order</a></h3>
         </div>
     </div>
 </section>
 
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Ushbu mahsulotlarni rostan ham buyurtma qilmoqchimisiz</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                  </tr>
+                </thead>
+                {%for prod in all_orders %}
+                <tbody>
+                  <tr>
+                    <th scope="row"> {{prod.id}}</th>
+                    <td> {{prod.name}}</td>
+                    <td>{{prod.price}}$</td>
+                    <td>{{prod.quantity}}</td>
+                  </tr>
+                  
+                </tbody>
+                {% endfor %}
+              </table>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bekor qilish</button>
+          {% if user.is_authenticated %}
+          <form action="{% url 'product:order'%}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-success">Ha tasdiqlayman</button>
+          </form>
+          {% else %}
+          <form action="{% url 'login_page'%}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-success">Ha tasdiqlayman</button>
+        </form>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+
 <script>
-
-
-
+     
     $(document).on('click', '#delete_product',  function(e){
         e.preventDefault();
         $.ajax({
             type: 'POST',
-            url:  "{% url 'mahsulot:cart_delete'%}",
+            url:  "{% url 'product:cart_delete'%}",
             data:{
                 
                 product_id: $(this).data('index'),
@@ -68,7 +118,7 @@
         e.preventDefault();
         $.ajax({
             type: 'POST',
-            url:  "{% url 'mahsulot:cart_update'%}",
+            url:  "{% url 'product:cart_update'%}",
             data:{
                 
                 product_id: $(this).data('index'),
@@ -84,4 +134,4 @@
         })
     })
 </script>
-   {% endblock%}    
+{% endblock%}    
